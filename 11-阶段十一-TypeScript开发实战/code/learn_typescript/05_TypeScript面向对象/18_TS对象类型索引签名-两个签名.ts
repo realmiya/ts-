@@ -1,7 +1,7 @@
 interface IIndexType {
   // 两个索引类型的写法
-  [index: number]: string
-  [key: string]: any
+  // [index: number]: string
+  // [key: string]: any
 
   // 要求一:下面的写法不允许: 数字类型索引的类型, 必须是字符串类型索引的类型的 子类型
   // 结论: 数字类型必须是比如字符串类型更加确定的类型(需要是字符串类型的子类型)
@@ -15,18 +15,23 @@ interface IIndexType {
   // [key: string]: string
 
   // 要求二: 如果索引签名中有定义其他属性, 其他属性返回的类型, 必须符合string类型返回的属性
-  // [index: number]: string
-  // [key: string]: number|string
+  [index: number]: string
+  [key: string]: number|string
 
-  // aaa: string
-  // bbb: boolean 错误的类型
+  aaa: number|string
+  //aaa: boolean 错误的类型
+  //因为names.aaa= names["aaa"], 然后就把属性aaa看成string了，
+  //然后根据19行要求返回的事number或者string，就和返回boolean矛盾了
 }
+const names: IIndexType = {
+  0: "abc",
+  1: "cba",
+  2: "nba",
+  aaa: "123",
+};
 
-const names: IIndexType = ["abc", "cba", "nba"]
 const item1 = names[0]
 const forEachFn = names["forEach"]
-
-names["aaa"]
-
+//names["forEach"]=names.forEach会回function，又矛盾了
 export {}
 
